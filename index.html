@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SENDA · Laboratorio Total Compañía</title><link rel="stylesheet" href="./static/style.css"><style>.demo-banner{position:relative;z-index:10;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;padding:12px 22px;background:#402b17;border-bottom:2px solid #bd9152;color:#fff1d6;font:600 12px/1.4 system-ui,sans-serif}.demo-banner span{font-weight:400}.demo-banner a{color:#fff1d6;text-decoration:underline}</style></head>
+<body><div class="demo-banner" role="note"><strong>SENDA · DEMOSTRACIÓN VISUAL</strong><span>Datos sintéticos · no guarda información · no ejecuta el motor presupuestal</span><a href="https://github.com/zatzuro/senda-core">Abrir SENDA real en GitHub ↗</a></div>
+<header class="header"><div><div class="eyebrow">INTELIGENCIA PRESUPUESTAL COMERCIAL</div><h1>SENDA <small>VISTA DEMO</small></h1><p>Laboratorio Total Compañía · Codespaces o Windows privado</p></div><div class="right"><span id="server-state" class="pill">Iniciando SENDA…</span><span class="muted small">Datos privados · sin servicios externos</span></div></header>
+<main class="layout">
+<div class="notice success"><strong>Nuevo flujo — Presupuesto anual 2027:</strong> <a href="./annual.html" style="color:#cce2ff;font-weight:bold">Abrir construcción anual, mercado y decisión PRISA →</a><br><small>El laboratorio histórico permanece disponible en las pestañas siguientes.</small></div>
+<div class="notice success"><strong>Distribución mensual:</strong> <a href="./monthly.html" style="color:#cce2ff;font-weight:bold">Abrir presupuestos por mes, trimestre y semestre →</a></div>
+<nav aria-label="Secciones" class="nav">
+<button type="button" data-tab="history" class="selected">1. Históricos</button>
+<button type="button" data-tab="config">2. Configuración</button>
+<button type="button" data-tab="lab">3. Escenario</button>
+<button type="button" data-tab="comparison">4. Comparación</button>
+<button type="button" data-tab="backtests">5. Retropruebas</button>
+<button type="button" data-tab="learning">6. Aprendizaje</button>
+<button type="button" data-tab="records">7. Historial</button>
+<button type="button" data-tab="backup">8. Respaldo</button>
+<button type="button" data-tab="diagnostics" id="desktop-tab" hidden>Estado y diagnóstico</button>
+</nav>
+<div id="notice" class="notice" role="status" aria-live="polite">Preparando entorno…</div>
+<section id="history" class="panel active"><h2>Históricos comerciales</h2><p class="muted">Conoce la integridad de cada año. Los meses desconocidos permanecen faltantes; solo años completos se utilizan para proyecciones anuales.</p>
+<div class="split"><article class="card"><h3>Importar histórico CSV</h3><p>Columnas: <code>year,month,value</code> o <code>año,mes,valor</code>. Una fila por mes; años incompletos se conservan pero se excluyen del cálculo. Máximo 8 MB.</p>
+<form id="import-form"><label>Archivo CSV<input type="file" id="csv" accept=".csv,text/csv" required></label>
+<label>Formato numérico<select id="number-format"><option value="auto">Automático — rechazar ambigüedades</option><option value="es">Español: 1.234,56</option><option value="en">Inglés: 1,234.56</option></select></label>
+<label><input type="checkbox" id="allow-partial"> Confirmo que deseo conservar años incompletos (no entrarán al cálculo)</label>
+<button type="button" id="preview-import" class="outline">1. Validar y ver vista previa</button>
+<button type="submit">2. Confirmar importación</button></form>
+<div id="preview-results" class="hint" role="status">La vista previa no modifica los datos guardados.</div><p class="hint">Los archivos originales y sus versiones permanecen dentro del Codespace. No se envían a GitHub.</p></article>
+<article class="card"><h3>Fuente activa</h3><label>Histórico seleccionado<select id="imports"><option value="">Sin históricos</option></select></label><button type="button" id="activate">Activar fuente</button><p id="active-info" class="muted">Datos no disponibles</p></article></div>
+<div class="card"><h3>Resumen anual de la fuente activa</h3><div class="table-scroll"><table><thead><tr><th>Año</th><th>Cobertura</th><th>Total real anual</th></tr></thead><tbody id="years-body"><tr><td colspan="3">Sin información</td></tr></tbody></table></div></div></section>
+
+
+<section id="config" class="panel"><h2>Configuración de metodología</h2>
+<p class="muted">F · Referencia Total Compañía: estima el total anual histórico ponderado y distribuye por participaciones mensuales. No equivale a LA FÓRMULA original para repartir metas entre ejecutivos. Los cuatro años recientes y sus pesos son solo una <strong>sugerencia sin aprobación gerencial</strong>.</p>
+<div class="split"><article class="card">
+<form id="config-form"><label>Año que deseas presupuestar<input id="config-year" type="number" min="1901" max="2201" required></label>
+<h3>Años y ponderaciones (%)</h3><div id="weight-rows">Carga históricos para configurar.</div>
+<p id="weight-sum" class="hint">Suma: —</p><button type="submit">Guardar nueva configuración / activar versión</button></form></article>
+<article class="card"><h3>Configuraciones congeladas</h3>
+<label>Selecciona versión guardada<select id="config-list"><option value="">Usar sugerencia inicial</option></select></label>
+<button type="button" id="load-config" class="outline">Cargar versión para comparar</button>
+<p id="config-status" class="hint">Sin versión gerencial activa: la ejecución deberá señalar la sugerencia.</p></article></div>
+</section>
+<section id="lab" class="panel"><h2>Laboratorio de predicción</h2><p class="muted">SENDA utiliza exclusivamente el histórico previo al año objetivo. F = Fórmula, S = SENDA; R se muestra después de evaluar una predicción congelada.</p>
+<div class="split"><article class="card"><h3>Nueva predicción</h3><form id="predict-form"><label>Año objetivo<input type="number" id="target-year" min="1901" max="2201" required></label>
+<label>Prueba<select id="mode"><option value="free">Libre — predice total y meses</option><option value="controlled">Controlada — distribuye total dado</option></select></label>
+<label id="imposed-wrap" hidden>Total anual impuesto<input type="number" id="imposed" min="0" step="any" placeholder="Valor total anual"></label>
+<button type="submit">Ejecutar y congelar predicción</button></form>
+<p class="hint">Selecciona y guarda una versión en Configuración. En modo controlado <strong>F y S tienen exactamente el mismo total</strong>. Sin configuración guardada se usa una sugerencia no aprobada.</p></article>
+<article class="card"><h3>Predicciones guardadas</h3><label>Snapshot<select id="snapshots"><option value="">Ninguno</option></select></label><button type="button" id="view-snapshot">Consultar snapshot</button><button type="button" id="reveal" class="outline">Revelar R y aprender</button><p class="hint">La evaluación solo se habilita cuando el año cerró y existe R en el histórico original.</p></article></div>
+<div id="prediction" class="card hidden"><h3>Resultado congelado <span id="snap-id" class="hint"></span></h3><div class="metrics"><div><span>F · Fórmula</span><strong id="f-total">—</strong></div><div><span>S · SENDA</span><strong id="s-total">—</strong></div><div><span>Suficiencia histórica</span><strong id="conf">—</strong></div></div>
+<p id="explanation" class="muted"></p><div class="table-scroll"><table><thead><tr><th>Mes</th><th>F</th><th>S</th><th>Δ S–F</th></tr></thead><tbody id="monthly"></tbody></table></div>
+<h3>Evidencia de información y aprendizaje</h3><p id="quality-info" class="hint">—</p>
+<p id="learning-info" class="hint">—</p><h3>Evaluación contra R</h3><div id="evaluation" class="muted">Sin evaluación. La predicción permanece congelada.</div></div>
+</section>
+
+<section id="comparison" class="panel"><h2>Comparación F / S</h2>
+<p class="muted">Curvas mensuales de la predicción seleccionada. Los valores exactos están en la tabla del escenario; no confundas total calculado con presupuesto impuesto.</p>
+<article class="card"><h3>Distribución mensual</h3><div id="comparison-meta" class="hint">Ejecuta o consulta una predicción.</div>
+<svg id="comparison-chart" viewBox="0 0 680 250" role="img" aria-label="Curvas mensuales F y S" class="curve-chart"></svg>
+<div id="comparison-table" class="table-scroll"></div></article></section>
+<section id="backtests" class="panel"><h2>Retropruebas cronológicas</h2><p class="muted">Cada año se proyecta utilizando únicamente los años anteriores. Resultados persistentes con F, S, R y errores.</p>
+<div class="split"><article class="card"><form id="backtest-form"><label>Primer año a evaluar<input type="number" id="first-year" min="1901" max="2201" required></label><label><input type="checkbox" id="controlled-backtest"> Distribución con total real conocido: oráculo experimental compartido por F y S, no predicción del total desconocido</label><button type="submit">Ejecutar retroprueba y guardar resultados</button></form></article><article class="card"><h3>Retropruebas guardadas</h3><label>Resultado<select id="backtest-list"><option value="">Sin resultados</option></select></label><button type="button" id="view-backtest">Consultar</button></article></div>
+<div id="backtest-output" class="card hidden"><h3>Comparación histórica</h3><div class="table-scroll"><table><thead><tr><th>Año</th><th>F</th><th>S</th><th>R</th><th>WAPE S</th><th>Mejor</th></tr></thead><tbody id="backtest-rows"></tbody></table></div><p id="global-result" class="hint">Se necesitan al menos tres años comparables para declarar un ganador global.</p><div id="learning-impact" class="hint"></div></div></section>
+
+<section id="learning" class="panel"><h2>Memoria y aprendizaje</h2><p class="muted">El ajuste estadístico operativo se calcula solo con errores previos al corte. El conocimiento persistido documenta evaluaciones, pero no modifica por sí solo las predicciones. Un cambio de pronóstico no demuestra mejora.</p><article class="card"><h3>Conocimiento persistido</h3><div id="knowledge-list">Aún no existe conocimiento guardado.</div></article></section>
+
+<section id="records" class="panel"><h2>Historial inmutable</h2>
+<p class="muted">Versiones, predicciones congeladas, evaluaciones y retropruebas. Los resultados heredados V0.1.1 no son directamente comparables.</p>
+<article class="card"><div id="records-content">Sin registros.</div></article></section>
+<section id="backup" class="panel"><h2>Respaldo y restauración</h2><p class="muted">El mismo Codespace conserva archivos entre detenciones, pero eliminarlo o dejar vencer su retención puede destruir la información. Conserva un respaldo descargado en una ubicación privada.</p>
+<div class="split"><article class="card"><h3>Descargar respaldo</h3><p>Exporta históricos originales, datos normalizados, predicciones, retropruebas, snapshots, conocimiento y configuración dentro de un único archivo ZIP con checksum SHA-256.</p><button type="button" id="download-backup">Descargar respaldo privado</button></article>
+<article class="card danger"><h3>Restaurar en este Codespace</h3><p>Valida formato, compatibilidad e integridad. La base actual se conservará como copia previa. Esta acción reemplaza la base activa.</p><form id="restore-form"><label>Respaldo SENDA (.zip)<input id="restore-file" type="file" accept=".zip" required></label><label>Para confirmar escribe <code>RESTAURAR</code><input id="restore-confirm" autocomplete="off" required placeholder="RESTAURAR"></label><button type="submit">Validar y restaurar respaldo</button></form></article></div>
+<div class="card"><h3>Protección de datos y costos</h3><p>Usa siempre puerto <strong>privado</strong>. Codespaces no es hosting permanente. Detén el Codespace al terminar. Revisa tu cuota y deshabilita los gastos adicionales desde la configuración de GitHub. La disponibilidad de uso gratuito depende de tu cuenta y de la cuota restante.</p></div></section>
+<section id="diagnostics" class="panel">
+<h2>Estado y diagnóstico del SENDA local</h2>
+<p class="muted">Los diagnósticos permanecen exclusivamente en este equipo. No se transmite información presupuestal ni telemetría. Solo se contacta a GitHub para consultar y descargar actualizaciones privadas firmadas.</p>
+<div class="split">
+<article class="card"><h3>Instalación local</h3>
+<p id="desk-version" class="hint">Sin consultar</p>
+<p id="desk-path" class="hint">—</p>
+<button type="button" id="desk-open-folder" class="outline">Abrir Documentos / SENDA</button>
+<button type="button" id="desk-backup" class="outline">Guardar respaldo local</button><p id="desk-backup-status" class="hint">Respaldos exclusivamente locales.</p></article>
+<article class="card"><h3>Actualizaciones</h3>
+<p id="desk-updates" class="hint">Sin consultar</p>
+<label><input type="checkbox" id="desk-auto-update"> Verificar y aplicar releases aprobados al cerrar SENDA</label>
+<p class="hint">Se descargan únicamente paquetes de release firmados. El enlace GitHub se autoriza en la ventana nativa de SENDA.</p></article></div>
+<article class="card"><h3>Últimas incidencias locales</h3><div id="desk-events" class="hint">Sin eventos.</div></article>
+</section>
+</main><footer>SENDA · Total Compañía · Vista ilustrativa con datos ficticios en el laboratorio real</footer>
+
+<script defer src="./static/demo.js"></script></body></html>

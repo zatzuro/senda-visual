@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SENDA · Construcción mensual PRISA</title><link rel="stylesheet" href="./static/monthly.css"><style>.demo-banner{position:relative;z-index:10;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;padding:12px 22px;background:#402b17;border-bottom:2px solid #bd9152;color:#fff1d6;font:600 12px/1.4 system-ui,sans-serif}.demo-banner span{font-weight:400}.demo-banner a{color:#fff1d6;text-decoration:underline}</style></head>
+<body><div class="demo-banner" role="note"><strong>SENDA · DEMOSTRACIÓN VISUAL</strong><span>Datos sintéticos · no guarda información · no ejecuta el motor presupuestal</span><a href="https://github.com/zatzuro/senda-core">Abrir SENDA real en GitHub ↗</a></div><header class="top"><div><div class="eyebrow">SENDA · PRESUPUESTO COMERCIAL</div>
+<h1>Distribución mensual <span id="heading-year">2027</span></h1>
+<p>Doce meses · un presupuesto anual PRISA · decisión gerencial controlada</p></div>
+<a href="./annual.html">← Volver a presupuesto anual</a></header>
+<main>
+<div id="notice" class="notice" role="status" aria-live="polite">Consultando presupuestos anuales confirmados…</div>
+<section class="card setup"><h2>1. Presupuesto anual de referencia</h2>
+<p class="muted">La distribución se vincula a una versión anual PRISA confirmada; no recalcula ni modifica la Fase 1.</p>
+<div class="controls"><label>Versión anual confirmada<select id="annual-select"><option value="">Seleccione…</option></select></label>
+<button id="create-scenario" class="primary" type="button">Crear escenario mensual</button>
+<label>Escenario mensual guardado<select id="scenario-select"><option value="">Seleccione…</option></select></label>
+<button id="open-scenario" type="button">Abrir</button></div>
+<p id="annual-summary" class="hint">Confirme primero el presupuesto anual.</p></section>
+<section class="card"><div class="section-head"><h2>2. Evolución histórica y relevancia</h2>
+<div class="switches" aria-label="Período de visualización" id="period-switch">
+<button class="chosen" type="button" data-period="mes" aria-pressed="true">MES</button>
+<button type="button" data-period="trimestre" aria-pressed="false">TRIMESTRE</button>
+<button type="button" data-period="semestre" aria-pressed="false">SEMESTRE</button>
+</div></div>
+<p class="muted">Los colores representan períodos. Las barras usan la misma escala absoluta entre años. Trimestres y semestres se calculan desde los doce meses y son de solo lectura.</p>
+<div class="legend" id="legend"></div><div id="history" class="history"><p>Abra un escenario mensual para ver sus años.</p></div>
+<p class="hint">VERDE: referencia principal · AMARILLO: influencia reducida · ROJO: excluido. La selección es independiente del presupuesto anual.</p></section>
+<section class="card"><h2>3. Recomendación SENDA</h2>
+<p class="muted">Distribución estacional explicable a partir de ventas mensuales normalizadas. No utiliza el algoritmo de presupuesto anual ni la fórmula por ejecutivo.</p>
+<div class="actions"><button id="recommend" class="primary" type="button">SENDA, PROPONER DISTRIBUCIÓN MENSUAL</button>
+<button id="adopt" type="button" disabled>Aplicar propuesta al borrador (con confirmación)</button></div>
+<div id="proposal" class="proposal muted">Aún no existe una propuesta.</div></section>
+<section class="card"><div class="section-head"><h2>4. Presupuesto mensual del usuario</h2><span class="pill" id="view-label">MES · editable</span></div>
+<p class="muted">Edite directamente importes en millones. Cada mes es independiente: SENDA no modifica los demás al escribir. Al cambiar de vista conservará sus cambios sin guardar.</p>
+<div id="editor" class="editor"><p>Primero cree un escenario.</p></div>
+<div class="totals" id="totals" aria-live="polite"><div>Presupuesto anual: —</div><div>Distribuido: —</div><div>Diferencia: —</div></div>
+<p class="hint" id="rounding-note">Los importes originales y el control de conciliación se conservan con precisión decimal exacta; las etiquetas en millones son solo presentación.</p>
+<div class="actions"><button type="button" id="save-draft" disabled>Guardar borrador (admite descuadre)</button>
+<button type="button" id="balance" disabled>Cuadrar diciembre expresamente</button>
+<button type="button" id="confirm" class="primary" disabled>Confirmar distribución PRISA</button></div>
+<p id="draft-status" class="hint">Los cambios no guardados permanecerán al alternar Mes/Trimestre/Semestre.</p></section>
+<section class="card"><h2>5. Versiones y trazabilidad</h2><p class="muted">Las versiones confirmadas son inmutables. Si cambia el anual PRISA, cree un nuevo escenario vinculado a la nueva versión.</p>
+<div id="confirmed-versions">Sin distribuciones confirmadas.</div><div id="version-detail" class="hint"></div></section>
+</main><footer>SENDA · Fase 2 · Vista ilustrativa con datos ficticios ni servicios externos · <a href="./index.html">Laboratorio anterior</a></footer>
+
+<script defer src="./static/demo.js"></script></body></html>

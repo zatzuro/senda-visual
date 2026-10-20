@@ -1,0 +1,15 @@
+{
+  "kind": "static-synthetic-preview",
+  "source_repository": "zatzuro/senda-core",
+  "source_branch": "gh-pages",
+  "source_sha": "779a6aa1e2c82eabf8db405b10c60d0fc3411103",
+  "source_main_sha_at_creation": "5160b9ad84de2babd4a0b17457056afcf8b1b0af",
+  "features": [
+    "lab",
+    "annual",
+    "monthly"
+  ],
+  "real_data": false,
+  "backend": false,
+  "notes": "Contenido ilustrativo, no es release del motor. El contenido nuevo requiere revisión antes de publicarse."
+}
